@@ -7,284 +7,160 @@ package main
 
 import "fmt"
 
-type Pengalaman struct {
-	Posisi     string
-	Perusahaan string
-	Tahun      int
+type RiwayatKerja struct {
+	Jabatan    string
+	Organisasi string
+	TahunMasuk int
 }
-
-type Pendidikan struct {
-	Gelar      string
-	Institusi  string
+type RiwayatStudi struct {
+	Tingkat    string
+	Kampus     string
 	TahunLulus int
 }
-
-type Pengguna struct {
-	Nama               string
-	Pengalaman         [10]Pengalaman
-	JumlahPengalaman   int
-	Keterampilan       [10]string
-	JumlahSkill        int
-	Pendidikan         [10]Pendidikan
-	JumlahPendidikan   int
+type Kandidat struct {
+	NamaLengkap      string
+	PengalamanKerja  [10]RiwayatKerja
+	TotalPengalaman  int
+	Keahlian         [10]string
+	TotalKeahlian    int
+	PendidikanFormal [10]RiwayatStudi
+	TotalPendidikan  int
+	NaskahResume     string
 }
 
-func (p *Pengguna) TambahPengalaman() {
-	if p.JumlahPengalaman >= 10 {
-		fmt.Println("Maksimal pengalaman tercapai.")
-		return
-	}
-	var posisi, perusahaan string
-	var tahun int
-	fmt.Print("Masukkan posisi: ")
-	fmt.Scanln(&posisi)
-	fmt.Print("Masukkan perusahaan: ")
-	fmt.Scanln(&perusahaan)
-	fmt.Print("Masukkan tahun: ")
-	fmt.Scanln(&tahun)
-
-	p.Pengalaman[p.JumlahPengalaman] = Pengalaman{posisi, perusahaan, tahun}
-	p.JumlahPengalaman++
-}
-
-func (p *Pengguna) TambahKeterampilan() {
-	if p.JumlahSkill >= 10 {
-		fmt.Println("Maksimal keterampilan tercapai.")
-		return
-	}
-	var skill string
-	fmt.Print("Masukkan keterampilan: ")
-	fmt.Scanln(&skill)
-	p.Keterampilan[p.JumlahSkill] = skill
-	p.JumlahSkill++
-}
-
-func (p *Pengguna) TambahPendidikan() {
-	if p.JumlahPendidikan >= 10 {
-		fmt.Println("Maksimal pendidikan tercapai.")
-		return
-	}
-	var gelar, institusi string
-	var tahun int
-	fmt.Print("Masukkan gelar: ")
-	fmt.Scanln(&gelar)
-	fmt.Print("Masukkan institusi: ")
-	fmt.Scanln(&institusi)
-	fmt.Print("Masukkan tahun lulus: ")
-	fmt.Scanln(&tahun)
-	p.Pendidikan[p.JumlahPendidikan] = Pendidikan{gelar, institusi, tahun}
-	p.JumlahPendidikan++
-}
-
-func main() {
-	var user Pengguna
-
-	fmt.Print("Masukkan nama pengguna: ")
-	fmt.Scanln(&user.Nama)
-
-	fmt.Println("\n--- Tambah Pengalaman Kerja ---")
-	user.TambahPengalaman()
-
-	fmt.Println("\n--- Tambah Keterampilan ---")
-	user.TambahKeterampilan()
-
-	fmt.Println("\n--- Tambah Pendidikan ---")
-	user.TambahPendidikan()
-
-	fmt.Println("\n--- Data yang Diinput ---")
-	fmt.Println("Nama:", user.Nama)
-
-	fmt.Println("Pengalaman:")
-	for i := 0; i < user.JumlahPengalaman; i++ {
-		p := user.Pengalaman[i]
-		fmt.Println("-", p.Posisi, "di", p.Perusahaan, "tahun", p.Tahun)
-	}
-
-	fmt.Println("Keterampilan:")
-	for i := 0; i < user.JumlahSkill; i++ {
-		fmt.Println("-", user.Keterampilan[i])
-	}
-
-	fmt.Println("Pendidikan:")
-	for i := 0; i < user.JumlahPendidikan; i++ {
-		edu := user.Pendidikan[i]
-		fmt.Println("-", edu.Gelar, "dari", edu.Institusi, "lulus tahun", edu.TahunLulus)
-	}
-}
-func panjang(s string) int {
+func hitungPanjang(teks string) int {
 	i := 0
-	for ; i < 1000; i++ {
-		if s[i:i+1] == "" {
+	for i != 1000 {
+		if teks[i:i+1] == "" {
 			return i
 		}
+		i++
 	}
 	return i
 }
-
-// Ubah huruf ke huruf kecil
-func toLower(s string) string {
+func keHurufKecil(teks string) string {
 	var hasil string
 	i := 0
-	for ; i < 1000; i++ {
-		ch := s[i : i+1]
-		if ch == "" {
+	for i != 1000 {
+		if teks[i:i+1] == "" {
 			return hasil
 		}
-		kode := ch[0]
-		if kode >= 'A' && kode <= 'Z' {
-			kode += 32
+		kar := teks[i]
+		if kar >= 'A' && kar <= 'Z' {
+			kar += 32
 		}
-		hasil += string(kode)
+		hasil += string(kar)
+		i++
 	}
 	return hasil
 }
-func contains(teks string, substr string) bool {
-	n := panjang(teks)
-	m := panjang(substr)
+func mengandung(teks string, subteks string) bool {
+	n := hitungPanjang(teks)
+	m := hitungPanjang(subteks)
 	i := 0
-	for ; i <= n-m; i++ {
+	for i <= n-m {
 		j := 0
 		sama := 1
-		for ; j < m; j++ {
-			if teks[i+j:i+j+1] != substr[j:j+1] {
+		for j < m {
+			if teks[i+j:i+j+1] != subteks[j:j+1] {
 				sama = 0
 			}
+			j++
 		}
 		if sama == 1 {
 			return true
 		}
+		i++
 	}
 	return false
 }
-// Hitung panjang string tanpa len
-func panjang(s string) int {
+func deteksiIndustri(teks string, daftar [20]string) string {
 	i := 0
-	for ; i < 1000; i++ {
-		if s[i:i+1] == "" {
-			return i
+	for i < 20 {
+		if daftar[i] != "" && mengandung(teks, daftar[i]) {
+			return daftar[i]
 		}
+		i++
 	}
-	return i
-}
-
-// Ubah huruf ke huruf kecil
-func toLower(s string) string {
-	var hasil string
-	i := 0
-	for ; i < 1000; i++ {
-		ch := s[i : i+1]
-		if ch == "" {
-			return hasil
-		}
-		kode := ch[0]
-		if kode >= 'A' && kode <= 'Z' {
-			kode += 32
-		}
-		hasil += string(kode)
-	}
-	return hasil
-}
-
-// Cek apakah substr ada dalam teks
-func contains(teks string, substr string) bool {
-	n := panjang(teks)
-	m := panjang(substr)
-	i := 0
-	for ; i <= n-m; i++ {
-		j := 0
-		sama := 1
-		for ; j < m; j++ {
-			if teks[i+j:i+j+1] != substr[j:j+1] {
-				sama = 0
-			}
-		}
-		if sama == 1 {
-			return true
-		}
-	}
-	return false
-}
-
-func panjang(s string) int {
-	i := 0
-	for ; i < 1000; i++ {
-		if s[i:i+1] == "" {
-			return i
-		}
-	}
-	return i
-}
-
-// Ubah ke huruf kecil
-func toLower(s string) string {
-	var hasil string
-	i := 0
-	for ; i < 1000; i++ {
-		ch := s[i : i+1]
-		if ch == "" {
-			return hasil
-		}
-		kode := ch[0]
-		if kode >= 'A' && kode <= 'Z' {
-			kode += 32
-		}
-		hasil += string(kode)
-	}
-	return hasil
-}
-
-// Cek substring tanpa strings.Contains
-func contains(teks string, substr string) bool {
-	n := panjang(teks)
-	m := panjang(substr)
-	i := 0
-	for ; i <= n-m; i++ {
-		j := 0
-		match := 1
-		for ; j < m; j++ {
-			if teks[i+j:i+j+1] != substr[j:j+1] {
-				match = 0
-			}
-		}
-		if match == 1 {
-			return true
-		}
-	}
-	return false
-}
-
-// Sequential Search
-func sequentialSearch(template [10]string, resume string) {
-	fmt.Println("\nHasil Sequential Search:")
-	i := 0
-	for ; i < 10; i++ {
-		if template[i] == "" {
-			i = 10
-		} else {
-			if contains(resume, template[i]) {
-				fmt.Println("- Ditemukan:", template[i])
-			}
-		}
-	}
-}
-
-// Binary Search (harus urut)
-func binarySearch(template [10]string, resume string) {
-	fmt.Println("\nHasil Binary Search (manual urut):")
 	kiri := 0
-	kanan := 4 // hanya 5 data contoh
-
-	for ; kiri <= kanan; {
+	kanan := 19
+	for kiri <= kanan {
 		tengah := (kiri + kanan) / 2
-		if contains(resume, template[tengah]) {
-			fmt.Println("- Ditemukan:", template[tengah])
-			kiri = kanan + 1 // keluar
+		if daftar[tengah] == "" {
+			kanan = tengah - 1
+		} else if mengandung(teks, daftar[tengah]) {
+			return daftar[tengah]
+		} else if daftar[tengah] < "data analyst" {
+			kiri = tengah + 1
 		} else {
-			// urutan manual alfabet
-			if template[tengah] < "data analyst" {
-				kiri = tengah + 1
+			kanan = tengah - 1
+		}
+	}
+	return ""
+}
+func main() {
+	var pelamar Kandidat
+	fmt.Print("Masukkan nama lengkap: ")
+	fmt.Scanln(&pelamar.NamaLengkap)
+	menu := -1
+	for menu != 0 {
+		fmt.Println("\n===== MENU =====")
+		fmt.Println("1. Tambah Riwayat Kerja")
+		fmt.Println("2. Tambah Keahlian")
+		fmt.Println("3. Tambah Pendidikan")
+		fmt.Println("4. Edit Riwayat Kerja")
+		fmt.Println("5. Hapus Riwayat Kerja")
+		fmt.Println("6. Edit Keahlian")
+		fmt.Println("7. Hapus Keahlian")
+		fmt.Println("8. Edit Pendidikan")
+		fmt.Println("9. Hapus Pendidikan")
+		fmt.Println("10. Masukkan Resume + Surat Lamaran")
+		fmt.Println("0. Analisa dan Lanjut")
+		fmt.Print("Pilih menu: ")
+		fmt.Scanln(&menu)
+		if menu == 0 {
+			fmt.Println("\n[Analisa Resume dan Surat Lamaran]")
+			resume := keHurufKecil(pelamar.NaskahResume)
+			kategori := [5][5]string{
+				{"sql", "python", "tableau", "cloud", "excel"},
+				{"jira", "powerbi", "google data studio", "confluence", "slack"},
+				{"problem solving", "communication", "teamwork", "adaptability", "attention to detail"},
+				{"impact", "insight", "value", "optimize", "transform"},
+				{"meningkatkan", "efisiensi", "mengurangi", "hemat", "skala"},
+			}
+			judul := [5]string{
+				"- Keahlian teknis yang belum disebutkan:",
+				"- Tools/platform tidak disebutkan:",
+				"- Soft skill belum terlihat:",
+				"- Kata kerja kuat yang bisa digunakan:",
+				"- Pencapaian kuantitatif kurang terlihat:",
+			}
+			for k := 0; k < 5; k++ {
+				fmt.Println(judul[k])
+				i := 0
+				terlewat := 0
+				for i < 5 {
+					if !mengandung(resume, kategori[k][i]) {
+						fmt.Println("  •", kategori[k][i])
+						terlewat = 1
+					}
+					i++
+				}
+				if terlewat == 0 {
+					fmt.Println("  (Sudah lengkap)")
+				}
+			}
+			var daftarBidang [20]string = [20]string{
+				"ai", "banking", "cloud computing", "cybersecurity", "data analyst",
+				"devops", "e-commerce", "finance", "fmcg", "hr", "legal", "logistics",
+				"manufacturing", "marketing", "network engineer", "product manager",
+				"project manager", "software engineer", "startup", "telecommunication",
+			}
+			hasil := deteksiIndustri(resume, daftarBidang)
+			if hasil != "" {
+				fmt.Println("Cocok dengan bidang:", hasil)
 			} else {
-				kanan = tengah - 1
+				fmt.Println("Tidak ditemukan kecocokan.")
 			}
 		}
 	}
