@@ -156,3 +156,87 @@ func contains(teks string, substr string) bool {
 	}
 	return false
 }
+func panjang(s string) int {
+	i := 0
+	for ; i < 1000; i++ {
+		if s[i:i+1] == "" {
+			return i
+		}
+	}
+	return i
+}
+
+// Ubah ke huruf kecil
+func toLower(s string) string {
+	var hasil string
+	i := 0
+	for ; i < 1000; i++ {
+		ch := s[i : i+1]
+		if ch == "" {
+			return hasil
+		}
+		kode := ch[0]
+		if kode >= 'A' && kode <= 'Z' {
+			kode += 32
+		}
+		hasil += string(kode)
+	}
+	return hasil
+}
+
+// Cek substring tanpa strings.Contains
+func contains(teks string, substr string) bool {
+	n := panjang(teks)
+	m := panjang(substr)
+	i := 0
+	for ; i <= n-m; i++ {
+		j := 0
+		match := 1
+		for ; j < m; j++ {
+			if teks[i+j:i+j+1] != substr[j:j+1] {
+				match = 0
+			}
+		}
+		if match == 1 {
+			return true
+		}
+	}
+	return false
+}
+
+// Sequential Search
+func sequentialSearch(template [10]string, resume string) {
+	fmt.Println("\nHasil Sequential Search:")
+	i := 0
+	for ; i < 10; i++ {
+		if template[i] == "" {
+			i = 10
+		} else {
+			if contains(resume, template[i]) {
+				fmt.Println("- Ditemukan:", template[i])
+			}
+		}
+	}
+}
+
+// Binary Search (harus urut)
+func binarySearch(template [10]string, resume string) {
+	fmt.Println("\nHasil Binary Search (manual urut):")
+	kiri := 0
+	kanan := 4 // hanya 5 data contoh
+
+	for ; kiri <= kanan; {
+		tengah := (kiri + kanan) / 2
+		if contains(resume, template[tengah]) {
+			fmt.Println("- Ditemukan:", template[tengah])
+			kiri = kanan + 1 // keluar
+		} else {
+			// urutan manual alfabet
+			if template[tengah] < "data analyst" {
+				kiri = tengah + 1
+			} else {
+				kanan = tengah - 1
+			}
+		}
+	}
+}
