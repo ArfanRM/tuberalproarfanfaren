@@ -156,6 +156,55 @@ func contains(teks string, substr string) bool {
 	}
 	return false
 }
+// Hitung panjang string tanpa len
+func panjang(s string) int {
+	i := 0
+	for ; i < 1000; i++ {
+		if s[i:i+1] == "" {
+			return i
+		}
+	}
+	return i
+}
+
+// Ubah huruf ke huruf kecil
+func toLower(s string) string {
+	var hasil string
+	i := 0
+	for ; i < 1000; i++ {
+		ch := s[i : i+1]
+		if ch == "" {
+			return hasil
+		}
+		kode := ch[0]
+		if kode >= 'A' && kode <= 'Z' {
+			kode += 32
+		}
+		hasil += string(kode)
+	}
+	return hasil
+}
+
+// Cek apakah substr ada dalam teks
+func contains(teks string, substr string) bool {
+	n := panjang(teks)
+	m := panjang(substr)
+	i := 0
+	for ; i <= n-m; i++ {
+		j := 0
+		sama := 1
+		for ; j < m; j++ {
+			if teks[i+j:i+j+1] != substr[j:j+1] {
+				sama = 0
+			}
+		}
+		if sama == 1 {
+			return true
+		}
+	}
+	return false
+}
+
 func panjang(s string) int {
 	i := 0
 	for ; i < 1000; i++ {
